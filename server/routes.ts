@@ -7,10 +7,7 @@ import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   setupAuth(app);
-  // Add root redirect to /auth
-  app.get('/', (req, res) => {
-    res.redirect('/auth');
-  });
+
 
   app.post("/api/quizzes", async (req, res) => {
     if (!req.isAuthenticated()) {
