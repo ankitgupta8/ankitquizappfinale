@@ -57,18 +57,18 @@ export function QuizForm({ onSubmit, onPreview }: QuizFormProps) {
     subject: "Mathematics",
     chapters: [
       {
-        chapterName: "Basic Algebra",
+        chapterName: "Calculus",
         quizQuestions: [
           {
-            question: "Solve the quadratic equation: $x^2 + 5x + 6 = 0$",
+            question: "Evaluate the expression: `(2Delta)/a + Delta/b` when `Delta = 10`, `a = 2`, and `b = 5`",
             options: [
-              "$x = -2$ or $x = -3$",
-              "$x = 2$ or $x = 3$",
-              "$x = -1$ or $x = -6$",
-              "$x = 1$ or $x = 6$"
+              "`15`",
+              "`10`",
+              "`12`",
+              "`13`"
             ],
-            correctAnswer: "$x = -2$ or $x = -3$",
-            explanation: "To solve $x^2 + 5x + 6 = 0$:\n\n$$\\begin{align*} x^2 + 5x + 6 &= 0 \\\\ (x + 2)(x + 3) &= 0 \\\\ x &= -2 \\text{ or } x = -3 \\end{align*}$$"
+            correctAnswer: "`12`",
+            explanation: "Let's solve this step by step:\n\n`((2(10))/2 + 10/5) = (10 + 2) = 12`"
           }
         ]
       }

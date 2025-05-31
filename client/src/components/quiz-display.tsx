@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { CheckCircle2, XCircle, Eye, Home } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Link } from "wouter";
-import { LatexRenderer } from "./latex-renderer";
+import { MathRenderer } from "./math-renderer";
 
 type QuizDisplayProps = {
   quiz: Quiz;
@@ -102,7 +102,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-lg text-gray-700">
-                <LatexRenderer content={currentQuestion.question} />
+                <MathRenderer content={currentQuestion.question} />
               </div>
 
               <RadioGroup
@@ -123,7 +123,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                   >
                     <RadioGroupItem value={option} id={option} />
                     <Label htmlFor={option} className="flex-1 cursor-pointer text-gray-800">
-                      <LatexRenderer content={option} />
+                      <MathRenderer content={option} />
                     </Label>
                     {(showCurrentAnswer || showResults) && (
                       <>
@@ -145,7 +145,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                   <AlertDescription>
                     <p className="font-medium mb-2 text-gray-800">Explanation:</p>
                     <div className="text-gray-700">
-                      <LatexRenderer content={currentQuestion.explanation} />
+                      <MathRenderer content={currentQuestion.explanation} />
                     </div>
                   </AlertDescription>
                 </Alert>
@@ -228,16 +228,16 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                 {currentChapter?.quizQuestions.map((question, index) => (
                   <div key={index} className="space-y-2">
                     <p className="font-medium text-gray-800">
-                      Question {index + 1}: <LatexRenderer content={question.question} />
+                      Question {index + 1}: <MathRenderer content={question.question} />
                     </p>
                     <p className={answers[index] === question.correctAnswer ? "text-green-600" : "text-red-600"}>
-                      Your Answer: <LatexRenderer content={answers[index]} />
+                      Your Answer: <MathRenderer content={answers[index]} />
                     </p>
                     <p className="text-green-600">
-                      Correct Answer: <LatexRenderer content={question.correctAnswer} />
+                      Correct Answer: <MathRenderer content={question.correctAnswer} />
                     </p>
                     <div className="text-sm text-gray-600">
-                      <LatexRenderer content={question.explanation} />
+                      <MathRenderer content={question.explanation} />
                     </div>
                   </div>
                 ))}
