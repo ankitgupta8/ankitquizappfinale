@@ -1,0 +1,151 @@
+Here's a detailed prompt to create a **web-based quiz application** using **Vite + React** for the frontend and **PostgreSQL** for the backend, with authentication and JSON-based quiz rendering:
+
+---
+
+### **AI Agent Prompt: Web Quiz App**  
+**Title:** Build a Full-Stack Quiz Application with React, PostgreSQL, and JSON Integration  
+
+---
+
+### **Objective**  
+Develop a full-stack web application that allows users to:  
+1. **Create and render quizzes** from JSON input.  
+2. **Authenticate users** to track quiz attempts.  
+3. Store quiz attempts and user data in **PostgreSQL**.  
+
+---
+
+### **Core Features**  
+
+#### **1. Authentication**  
+- Implement JWT-based authentication for:  
+  - User **sign-up** (email, password).  
+  - User **login/logout**.  
+  - Protected routes (only authenticated users can create/view quizzes).  
+
+#### **2. JSON Data Input Screen**  
+- A dedicated screen with:  
+  - A **large text field** to input/paste quiz JSON (using the provided schema).  
+  - **Validation** to ensure JSON matches the required format (e.g., check for `subject`, `chapters`, `quizQuestions`).  
+  - A **preview button** to validate and preview the quiz structure.  
+  - A **submit button** to save the JSON to the backend (temporarily) and navigate to the quiz screen.  
+
+#### **3. Quiz Display Screen**  
+- Render the quiz dynamically from the JSON data with:  
+  - A dropdown to select **subjects** and **chapters**.  
+  - Interactive questions with **multiple-choice options**.  
+  - Real-time scoring and **results** (highlight correct/incorrect answers).  
+  - **Explanation** display for each question after submission.  
+
+#### **4. PostgreSQL Backend**  
+- Database tables:  
+  - **Users**: `id`, `email`, `password_hash`, `created_at`.  
+  - **Quiz Attempts**: `id`, `user_id`, `quiz_data` (JSONB), `score`, `timestamp`.  
+- APIs to:  
+  - Register/login users.  
+  - Save/retrieve quiz attempts.  
+
+---
+
+### **Technical Requirements**  
+
+#### **Frontend (Vite + React)**  
+- Use **React Router** for navigation (e.g., `/login`, `/quiz`, `/create-quiz`).  
+- State management with **Context API** or **Redux Toolkit**.  
+- UI libraries: **Material-UI** or **Chakra UI** for components.  
+- JSON schema validation with `zod` or `yup`.  
+
+#### **Backend (Node.js + Express + PostgreSQL)**  
+- REST API endpoints:  
+  - `POST /api/auth/signup`  
+  - `POST /api/auth/login`  
+  - `POST /api/quizzes` (save quiz JSON)  
+  - `GET /api/quizzes` (retrieve user-specific quizzes)  
+- Use **PostgreSQL** with `pg` or **Prisma** for database operations.  
+- Secure passwords with **bcrypt** and JWT for authentication.  
+
+#### **Quiz JSON Schema**  
+```json  
+[
+  {
+    "subject": "Mathematics",
+    "chapters": [
+      {
+        "chapterName": "Algebra",
+        "quizQuestions": [
+          {
+            "question": "What is the value of x in 2x + 5 = 11?",
+            "options": ["2", "3", "4", "5"],
+            "correctAnswer": "3",
+            "explanation": "Subtract 5 and divide by 2."
+          }
+        ]
+      }
+    ]
+  }
+]
+```  
+
+---
+
+### **Workflow**  
+1. **User Authentication**  
+   - Sign up → Login → Access quiz creation/rendering.  
+2. **Quiz Creation**  
+   - User pastes JSON → Validate → Preview → Submit.  
+3. **Quiz Rendering**  
+   - Select subject/chapter → Answer questions → Submit → View results.  
+
+---
+
+### **Security**  
+- Sanitize JSON input to prevent XSS attacks.  
+- Use HTTPS and secure cookies for JWT.  
+- Validate user permissions for API endpoints.  
+
+---
+
+### **Deliverables**  
+1. A functional React frontend with:  
+   - Authentication screens.  
+   - JSON input and quiz rendering screens.  
+2. A Node.js backend with PostgreSQL integration.  
+3. API documentation (Postman collection/Swagger).  
+4. A `README.md` with setup instructions.  
+
+---
+
+### **Example Code Snippets**  
+
+#### **Frontend JSON Input (React)**  
+```jsx  
+<textarea 
+  placeholder="Paste quiz JSON here..."
+  onChange={(e) => setJsonInput(e.target.value)}
+/>  
+<button onClick={validateAndPreview}>Preview Quiz</button>  
+```  
+
+#### **Backend API (Express)**  
+```javascript  
+app.post("/api/quizzes", async (req, res) => {
+  const { quizData, userId } = req.body;
+  // Save to PostgreSQL
+  await db.query(
+    "INSERT INTO quiz_attempts (user_id, quiz_data) VALUES ($1, $2)",
+    [userId, quizData]
+  );
+  res.status(201).send("Quiz saved!");
+});  
+```  
+
+---
+
+### **Additional Notes**  
+- Prioritize responsive design (mobile/desktop).  
+- Add loading states and error handling.  
+- Include unit tests for critical components.  
+
+---
+
+This prompt provides a clear roadmap for building the app. Let’s start coding! 🚀

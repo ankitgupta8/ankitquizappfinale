@@ -1,0 +1,18 @@
+{
+  "files": {
+    "drizzle.config.ts": [
+      {
+        "id": "4e547554-3a48-46e2-ae3a-f50f53d3c664",
+        "line": 4,
+        "version": 1,
+        "index": 78
+      },
+      {
+        "id": "e6d5f4de-58f5-4820-bbe3-5422bf012e0f",
+        "line": 5,
+        "version": 1,
+        "index": 149
+      }
+    ]
+  }
+}
