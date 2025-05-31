@@ -26,4 +26,4 @@ export function MathRenderer({ content }: MathRendererProps) {
       </span>
     </MathJaxContext>
   );
-} 
+}

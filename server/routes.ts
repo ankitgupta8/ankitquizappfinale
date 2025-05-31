@@ -8,6 +8,7 @@ import { z } from "zod";
 export async function registerRoutes(app: Express): Promise<Server> {
   setupAuth(app);
 
+
   app.post("/api/quizzes", async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.sendStatus(401);
