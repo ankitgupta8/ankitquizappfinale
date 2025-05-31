@@ -20,7 +20,7 @@ export function LatexRenderer({ content }: LatexRendererProps) {
 
   return (
     <MathJaxContext config={config}>
-      <MathJax inline={!content.includes("\n")}>{content}</MathJax>
+      <MathJax key={content} inline={!content.includes("\n")}>{content}</MathJax>
     </MathJaxContext>
   );
 } 
