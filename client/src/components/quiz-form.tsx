@@ -60,7 +60,7 @@ export function QuizForm({ onSubmit, onPreview }: QuizFormProps) {
         chapterName: "Calculus",
         quizQuestions: [
           {
-            question: "Evaluate the expression: `(2Delta)/a + Delta/b` when `Delta = 10`, `a = 2`, and `b = 5`",
+            question: "Evaluate the expression: `(2 Delta)/a + Delta/b` when `Delta = 10`, `a = 2`, and `b = 5`",
             options: [
               "`15`",
               "`10`",
@@ -68,7 +68,7 @@ export function QuizForm({ onSubmit, onPreview }: QuizFormProps) {
               "`13`"
             ],
             correctAnswer: "`12`",
-            explanation: "Let's solve this step by step:\n\n`((2(10))/2 + 10/5) = (10 + 2) = 12`"
+            explanation: "Let's solve this step by step:\n\n`((2 Delta)/a + Delta/b) = ((2(10))/2 + 10/5) = (10 + 2) = 12`"
           }
         ]
       }
