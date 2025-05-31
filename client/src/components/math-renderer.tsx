@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 interface MathRendererProps {
   content: string;
+  questionIndex: number;
 }
 
 const config = {
@@ -28,26 +29,26 @@ const config = {
   },
 };
 
-export function MathRenderer({ content }: MathRendererProps) {
+export function MathRenderer({ content, questionIndex }: MathRendererProps) {
   const [key, setKey] = useState(0);
   const [processedContent, setProcessedContent] = useState<string[]>([]);
 
   useEffect(() => {
-    // Process content whenever it changes
+    // Process content whenever it changes or question changes
     const parts = content.split(/(`.*?`)/g);
     setProcessedContent(parts);
     // Force re-render of MathJax
     setKey(prev => prev + 1);
-  }, [content]);
+  }, [content, questionIndex]); // Added questionIndex to dependencies
 
   return (
     <MathJaxContext config={config}>
-      <span key={key} className="math-content">
+      <span key={`${key}-${questionIndex}`} className="math-content">
         {processedContent.map((part, index) => {
           if (part.startsWith('`') && part.endsWith('`')) {
             return (
               <MathJax 
-                key={`${index}-${key}`}
+                key={`${index}-${key}-${questionIndex}`}
                 dynamic
                 hideUntilTypeset="first"
               >
@@ -55,7 +56,7 @@ export function MathRenderer({ content }: MathRendererProps) {
               </MathJax>
             );
           } else {
-            return <span key={`${index}-${key}`}>{part}</span>;
+            return <span key={`${index}-${key}-${questionIndex}`}>{part}</span>;
           }
         })}
       </span>
