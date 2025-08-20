@@ -185,7 +185,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
 
   return (
     <MathJaxContext config={mathJaxConfig}>
-      <div className="space-y-6 pb-24 bg-gradient-to-b from-sky-100 to-blue-100 rounded-lg shadow-lg p-6">
+      <div className="space-y-6 pb-24 bg-gradient-to-b from-sky-100 to-blue-100 rounded-lg shadow-lg p-4 sm:p-6 max-w-full overflow-hidden">
         {(showSubjectSelection || showChapterSelection) && (
           <div className="space-y-4">
             {showSubjectSelection && (
@@ -230,7 +230,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="text-lg text-gray-700">
+                <div className="text-lg text-gray-700 break-words">
                   <LatexRenderer content={currentQuestion.question} />
                 </div>
 
@@ -241,7 +241,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                   {currentQuestion.options.map((option, optionIndex) => (
                     <div
                       key={`${currentQuestionIndex}-${optionIndex}`}
-                      className={`flex items-center space-x-2 p-4 rounded-lg border shadow-sm hover:shadow-md transition-shadow cursor-pointer ${
+                      className={`flex items-start space-x-2 p-4 rounded-lg border shadow-sm hover:shadow-md transition-shadow cursor-pointer min-h-fit ${
                         (showCurrentAnswer || showResults) &&
                         (option === currentQuestion.correctAnswer
                           ? "bg-green-100 border-green-200"
@@ -251,7 +251,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                       }`}
                     >
                       <RadioGroupItem value={option} id={`${currentQuestionIndex}-${optionIndex}`} />
-                      <Label htmlFor={`${currentQuestionIndex}-${optionIndex}`} className="flex-1 cursor-pointer text-gray-800">
+                      <Label htmlFor={`${currentQuestionIndex}-${optionIndex}`} className="flex-1 cursor-pointer text-gray-800 break-words overflow-wrap-anywhere">
                         <LatexRenderer content={option} />
                       </Label>
                       {(showCurrentAnswer || showResults) && (
@@ -273,7 +273,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                   <Alert className="rounded-lg shadow-md">
                     <AlertDescription>
                       <p className="font-medium mb-2 text-gray-800">Explanation:</p>
-                      <div className="text-gray-700">
+                      <div className="text-gray-700 break-words overflow-wrap-anywhere">
                         <LatexRenderer content={currentQuestion.explanation} />
                       </div>
                     </AlertDescription>
@@ -437,16 +437,16 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                 <div className="space-y-6">
                   {currentChapter?.quizQuestions.map((question, index) => (
                     <div key={index} className="space-y-2">
-                      <p className="font-medium text-gray-800">
+                      <p className="font-medium text-gray-800 break-words">
                         Question {index + 1}: <LatexRenderer content={question.question} />
                       </p>
-                      <p className={answers[index] === question.correctAnswer ? "text-green-600" : "text-red-600"}>
+                      <p className={`break-words ${answers[index] === question.correctAnswer ? "text-green-600" : "text-red-600"}`}>
                         Your Answer: <LatexRenderer content={answers[index]} />
                       </p>
-                      <p className="text-green-600">
+                      <p className="text-green-600 break-words">
                         Correct Answer: <LatexRenderer content={question.correctAnswer} />
                       </p>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-gray-600 break-words overflow-wrap-anywhere">
                         <LatexRenderer content={question.explanation} />
                       </div>
                     </div>
