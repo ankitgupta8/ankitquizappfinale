@@ -29,6 +29,7 @@ export interface IStorage {
   createQuiz(quiz: InsertQuiz): Promise<QuizRecord>;
   getQuizzes(): Promise<QuizRecord[]>;
   getQuiz(id: number): Promise<QuizRecord | undefined>;
+  deleteQuiz(id: number, userId: string): Promise<boolean>;
   createQuizAttempt(attempt: InsertQuizAttempt): Promise<QuizAttempt>;
   getQuizAttempts(userId: string): Promise<QuizAttempt[]>;
   createQuizSubmission(submission: InsertQuizSubmission): Promise<QuizSubmission>;
@@ -162,6 +163,34 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error("Error getting quiz:", error);
       return undefined;
+    }
+  }
+
+  async deleteQuiz(id: number, userId: string): Promise<boolean> {
+    try {
+      const sql = getDbConnection();
+      
+      // Check if the quiz exists (no creator restriction)
+      const [quiz] = await sql`
+        SELECT * FROM quizzes
+        WHERE id = ${id} AND is_active = 1
+      `;
+      
+      if (!quiz) {
+        return false; // Quiz not found
+      }
+      
+      // Soft delete by setting is_active to 0 (no creator restriction)
+      const result = await sql`
+        UPDATE quizzes
+        SET is_active = 0, updated_at = NOW()
+        WHERE id = ${id}
+      `;
+      
+      return result.count > 0;
+    } catch (error) {
+      console.error("Error deleting quiz:", error);
+      return false;
     }
   }
 

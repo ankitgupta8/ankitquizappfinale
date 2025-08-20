@@ -1,13 +1,28 @@
 import { useAuth } from "@/hooks/use-auth";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { LogOut, PlusCircle, Book, History } from "lucide-react";
+import { LogOut, PlusCircle, Book, History, Trash2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function HomePage() {
   const { user, logoutMutation } = useAuth();
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   
   // Fetch available quizzes
   const { data: availableQuizzes } = useQuery<{
@@ -24,8 +39,36 @@ export default function HomePage() {
     queryKey: ["/api/quizzes"],
   });
 
+  // Delete quiz mutation
+  const deleteQuizMutation = useMutation({
+    mutationFn: async (quizId: number) => {
+      const response = await apiRequest("DELETE", `/api/quizzes/${quizId}`);
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Quiz Deleted",
+        description: "The quiz has been successfully deleted.",
+      });
+      // Refetch quizzes to update the list
+      queryClient.invalidateQueries({ queryKey: ["/api/quizzes"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete quiz. You can only delete quizzes you created.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleQuizClick = (quizId: number) => {
     setLocation(`/take?quiz=${quizId}`);
+  };
+
+  const handleDeleteQuiz = (quizId: number, event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent triggering the quiz click
+    deleteQuizMutation.mutate(quizId);
   };
 
   return (
@@ -119,8 +162,43 @@ export default function HomePage() {
                             )}
                           </div>
                         </div>
-                        <div className="text-sm text-muted-foreground">
-                          Click to take quiz →
+                        <div className="flex items-center gap-4">
+                          <div className="text-sm text-muted-foreground">
+                            Click to take quiz →
+                          </div>
+                          {/* Show delete button for all quizzes for now - will be restricted to creator only */}
+                          {true && (
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete Quiz</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to delete "{quiz.title}"? This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={(e) => handleDeleteQuiz(quiz.id, e)}
+                                    className="bg-red-600 hover:bg-red-700"
+                                    disabled={deleteQuizMutation.isPending}
+                                  >
+                                    {deleteQuizMutation.isPending ? "Deleting..." : "Delete"}
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          )}
                         </div>
                       </CardContent>
                     </Card>

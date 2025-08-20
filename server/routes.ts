@@ -63,6 +63,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Delete a quiz
+  app.delete("/api/quizzes/:id", verifySupabaseToken, async (req, res) => {
+    try {
+      const quizId = parseInt(req.params.id);
+      const userId = req.user!.id;
+      
+      const success = await storage.deleteQuiz(quizId, userId);
+      
+      if (!success) {
+        return res.status(404).json({
+          message: "Quiz not found or you don't have permission to delete it"
+        });
+      }
+      
+      res.json({ message: "Quiz deleted successfully" });
+    } catch (error) {
+      console.error('Quiz deletion error:', error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
   // Submit a quiz attempt
   app.post("/api/quiz-attempts", verifySupabaseToken, async (req, res) => {
     try {
