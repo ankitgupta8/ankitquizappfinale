@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Quiz API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .error { background-color: #ffebee; }
+        .success { background-color: #e8f5e8; }
+        button { margin: 5px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Quiz API Test</h1>
+    
+    <button onclick="testGetQuizzes()">Test GET /api/quizzes</button>
+    <button onclick="testCreateQuiz()">Test POST /api/quizzes</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        function addResult(message, isError = false) {
+            const div = document.createElement('div');
+            div.className = `result ${isError ? 'error' : 'success'}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            resultsDiv.appendChild(div);
+        }
+        
+        async function testGetQuizzes() {
+            try {
+                const response = await fetch('/api/quizzes');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult(`GET /api/quizzes SUCCESS: ${JSON.stringify(data, null, 2)}`);
+                } else {
+                    addResult(`GET /api/quizzes ERROR: ${response.status} - ${JSON.stringify(data)}`, true);
+                }
+            } catch (error) {
+                addResult(`GET /api/quizzes NETWORK ERROR: ${error.message}`, true);
+            }
+        }
+        
+        async function testCreateQuiz() {
+            const testQuiz = {
+                title: "Test Quiz",
+                description: "A test quiz",
+                subject: "Testing",
+                quizData: {
+                    subject: "Testing",
+                    chapters: [{
+                        chapterName: "Test Chapter",
+                        quizQuestions: [{
+                            question: "Test question?",
+                            options: ["A", "B", "C", "D"],
+                            correctAnswer: "A",
+                            explanation: "Test explanation"
+                        }]
+                    }]
+                }
+            };
+            
+            try {
+                const response = await fetch('/api/quizzes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testQuiz)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult(`POST /api/quizzes SUCCESS: ${JSON.stringify(data, null, 2)}`);
+                } else {
+                    addResult(`POST /api/quizzes ERROR: ${response.status} - ${JSON.stringify(data)}`, true);
+                }
+            } catch (error) {
+                addResult(`POST /api/quizzes NETWORK ERROR: ${error.message}`, true);
+            }
+        }
+    </script>
+</body>
+</html>
