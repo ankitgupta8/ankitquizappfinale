@@ -230,7 +230,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="text-lg text-gray-700 break-words">
+                <div className="text-lg text-gray-700 break-words whitespace-pre-wrap word-wrap-break-word">
                   <LatexRenderer content={currentQuestion.question} />
                 </div>
 
@@ -251,7 +251,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                       }`}
                     >
                       <RadioGroupItem value={option} id={`${currentQuestionIndex}-${optionIndex}`} />
-                      <Label htmlFor={`${currentQuestionIndex}-${optionIndex}`} className="flex-1 cursor-pointer text-gray-800 break-words overflow-wrap-anywhere">
+                      <Label htmlFor={`${currentQuestionIndex}-${optionIndex}`} className="flex-1 cursor-pointer text-gray-800 break-words overflow-wrap-anywhere whitespace-pre-wrap word-wrap-break-word">
                         <LatexRenderer content={option} />
                       </Label>
                       {(showCurrentAnswer || showResults) && (
@@ -273,7 +273,7 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                   <Alert className="rounded-lg shadow-md">
                     <AlertDescription>
                       <p className="font-medium mb-2 text-gray-800">Explanation:</p>
-                      <div className="text-gray-700 break-words overflow-wrap-anywhere">
+                      <div className="text-gray-700 break-words overflow-wrap-anywhere whitespace-pre-wrap word-wrap-break-word">
                         <LatexRenderer content={currentQuestion.explanation} />
                       </div>
                     </AlertDescription>
@@ -437,16 +437,16 @@ export function QuizDisplay({ quiz, onComplete, subject }: QuizDisplayProps) {
                 <div className="space-y-6">
                   {currentChapter?.quizQuestions.map((question, index) => (
                     <div key={index} className="space-y-2">
-                      <p className="font-medium text-gray-800 break-words">
+                      <p className="font-medium text-gray-800 break-words whitespace-pre-wrap word-wrap-break-word">
                         Question {index + 1}: <LatexRenderer content={question.question} />
                       </p>
-                      <p className={`break-words ${answers[index] === question.correctAnswer ? "text-green-600" : "text-red-600"}`}>
+                      <p className={`break-words whitespace-pre-wrap word-wrap-break-word ${answers[index] === question.correctAnswer ? "text-green-600" : "text-red-600"}`}>
                         Your Answer: <LatexRenderer content={answers[index]} />
                       </p>
-                      <p className="text-green-600 break-words">
+                      <p className="text-green-600 break-words whitespace-pre-wrap word-wrap-break-word">
                         Correct Answer: <LatexRenderer content={question.correctAnswer} />
                       </p>
-                      <div className="text-sm text-gray-600 break-words overflow-wrap-anywhere">
+                      <div className="text-sm text-gray-600 break-words overflow-wrap-anywhere whitespace-pre-wrap word-wrap-break-word">
                         <LatexRenderer content={question.explanation} />
                       </div>
                     </div>
