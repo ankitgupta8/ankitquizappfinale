@@ -12,8 +12,7 @@
     "db:migrate": "tsx server/migrations.ts",
     "migrate:data": "tsx scripts/migrate-data.ts",
     "cleanup:sqlite": "tsx scripts/cleanup-sqlite.ts",
-    "supabase:setup": "echo 'Please follow the SUPABASE_MIGRATION_GUIDE.md for setup instructions'",
-    "postinstall": "npm run check"
+    "supabase:setup": "echo 'Please follow the SUPABASE_MIGRATION_GUIDE.md for setup instructions'"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
