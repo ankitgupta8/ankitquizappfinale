@@ -79,10 +79,28 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // Serve static files with proper MIME types
+  app.use(express.static(distPath, {
+    setHeaders: (res, path) => {
+      // Set proper MIME types for JavaScript modules
+      if (path.endsWith('.js')) {
+        res.setHeader('Content-Type', 'application/javascript');
+      } else if (path.endsWith('.mjs')) {
+        res.setHeader('Content-Type', 'application/javascript');
+      } else if (path.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css');
+      }
+    }
+  }));
 
-  // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
+  // Only serve index.html for non-asset requests (SPA fallback)
+  app.use("*", (req, res, next) => {
+    // Don't serve index.html for asset requests
+    if (req.originalUrl.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
+      return res.status(404).send('Asset not found');
+    }
+    
+    // Serve index.html for all other routes (SPA routing)
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }
